@@ -1,0 +1,43 @@
+/*
+ * brand.css — design tokens extracted from https://www.tractorpartsasap.com/
+ * (All States Ag Parts). Consumed by styles.css and all block CSS.
+ */
+:root {
+  /* Fonts — source uses Roboto for both headings and body */
+  --heading-font-family: "Roboto", "Helvetica Neue", helvetica, arial, sans-serif;
+  --body-font-family: "Roboto", "Helvetica Neue", helvetica, arial, sans-serif;
+  --fixed-font-family: "Roboto Mono", menlo, consolas, "Liberation Mono", monospace;
+
+  /* Brand colors */
+  --background-color: #f4f4f4;
+  --light-color: #fff;
+  --dark-color: #212326;
+  --text-color: #333;
+  --text-muted-color: #666;
+  --link-color: #cd0000;
+  --link-hover-color: #ff3434;
+  --brand-red: #cd0000;
+  --brand-red-hover: #ff3434;
+  --border-color: #e0e0e0;
+
+  /* Body sizing */
+  --body-font-size-m: 14px;
+  --body-font-size-s: 13px;
+  --body-font-size-xs: 12px;
+  --body-line-height: 1.8;
+
+  /* Heading sizes (desktop) */
+  --heading-size-xxl: 40px;
+  --heading-size-xl: 32px;
+  --heading-size-l: 24px;
+  --heading-size-m: 19px;
+  --heading-size-s: 16px;
+  --heading-size-xs: 15px;
+
+  /* Layout */
+  --section-padding: 40px;
+  --content-max-width: 1280px;
+
+  /* Buttons */
+  --button-radius: 3px;
+}

@@ -1,73 +1,108 @@
 /*
  * cards-trust — horizontal value-proposition / trust bar.
- * Base cards markup (image/icon + text) rendered as an inline, borderless
- * row of items separated by vertical dividers rather than a bordered grid.
- * Small icon on top, bold title, one-line subtext beneath.
+ * Source: div.value-props on tractorpartsasap.com.
+ * A full-bleed white band holding a centered row of items; each item is a
+ * small icon, a bold title and a one-line muted subtext, with thin vertical
+ * divider rules between items. Collapses to a stacked column on small screens.
+ * All values extracted from source computed styles.
  */
 
-.cards-trust > ul {
-  list-style: none;
-  margin: 0;
+/* Full-bleed white band: break out of the section's max-width wrapper.
+ * Higher specificity than global `main > .section > div` so the white band
+ * spans the full viewport width as it does on the source. */
+main > .section > .cards-trust-wrapper {
+  max-width: none;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: stretch;
-  gap: 0;
 }
 
-.cards-trust > ul > li {
-  flex: 1 1 260px;
+.cards-trust {
+  background-color: var(--light-color); /* #fff */
+  padding: 48px 0;
+}
+
+/* Item row — mobile-first: stacked column, no dividers */
+.cards-trust > ul {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 20px;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  list-style: none;
+}
+
+.cards-trust > ul > li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px; /* icon -> text */
   text-align: center;
-  padding: 16px 24px;
-  border: 0;
-  background-color: transparent;
+  padding: 0 10px;
 }
 
-/* vertical divider between items (not before the first) */
-.cards-trust > ul > li + li {
-  border-left: 1px solid #dadada;
-}
-
+/* Icon */
 .cards-trust .cards-trust-card-image {
   line-height: 0;
-  margin-bottom: 8px;
 }
 
 .cards-trust .cards-trust-card-image img {
-  width: 48px;
-  height: 48px;
+  width: auto;
+  height: 50px;
   object-fit: contain;
 }
 
+/* Text block */
 .cards-trust .cards-trust-card-body {
   margin: 0;
 }
 
-.cards-trust .cards-trust-card-body p {
-  margin: 0;
-}
-
-.cards-trust .cards-trust-card-body strong,
+/* Title */
 .cards-trust .cards-trust-card-body h1,
 .cards-trust .cards-trust-card-body h2,
 .cards-trust .cards-trust-card-body h3,
-.cards-trust .cards-trust-card-body h4 {
-  font-size: var(--body-font-size-m);
-  font-weight: 700;
-  margin: 0 0 4px;
+.cards-trust .cards-trust-card-body h4,
+.cards-trust .cards-trust-card-body h5,
+.cards-trust .cards-trust-card-body h6 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.8;
+  color: #222;
 }
 
-@media (width <= 600px) {
+/* Subtext */
+.cards-trust .cards-trust-card-body p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-muted-color); /* ~#666 */
+}
+
+/* Tablet and up: horizontal row with vertical dividers */
+@media (width >= 600px) {
+  .cards-trust > ul {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+  }
+
   .cards-trust > ul > li {
-    flex-basis: 100%;
+    justify-content: center;
+    padding: 0 20px;
   }
 
   .cards-trust > ul > li + li {
-    border-left: 0;
-    border-top: 1px solid #dadada;
+    border-left: 1px solid #e5e5e5;
+  }
+}
+
+/* Desktop: wider separation between items */
+@media (width >= 900px) {
+  .cards-trust > ul > li {
+    padding: 0 48px;
   }
 }

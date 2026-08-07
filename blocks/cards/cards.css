@@ -1,27 +1,179 @@
-.cards > ul {
-  list-style: none;
+/*
+ * cards block — All States Ag Parts
+ * Two visual patterns, each authored as its own single-card block:
+ *   Pattern 1 "Shop by Categories": image (left) + title + link list (right).
+ *   Pattern 2 "Equipment showcase": background photo with centered overlay heading + description.
+ * Because every tile is a separate .cards block, the responsive grid is built at
+ * the section level (.cards-container) across sibling .cards-wrapper elements.
+ * Values extracted from tractorpartsasap.com computed styles.
+ */
+
+/* ===== Shared: turn sibling single-card blocks into a responsive grid ===== */
+main .section.cards-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: var(--content-max-width);
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+/* neutralise the per-wrapper max-width/centering the global section rule applies */
+main .section.cards-container > .cards-wrapper {
+  max-width: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
-  gap: 24px;
 }
 
-.cards > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+/* each block holds a single card (ul > li) */
+main .section.cards-container .cards > ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.cards .cards-card-body {
-  margin: 16px;
+main .section.cards-container .cards > ul > li {
+  margin: 0;
 }
 
-.cards .cards-card-image {
+/* ===== Pattern 1: Shop by Categories (body has a link list) ===== */
+main .section.cards-container:has(.cards-card-body ul) .cards > ul > li {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+main .section.cards-container:has(.cards-card-body ul) .cards-card-image {
+  flex: 0 0 46%;
   line-height: 0;
 }
 
-.cards > ul > li img {
+main .section.cards-container:has(.cards-card-body ul) .cards-card-image img {
+  display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: auto;
+}
+
+main .section.cards-container:has(.cards-card-body ul) .cards-card-body {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+main .section.cards-container:has(.cards-card-body ul) .cards-card-body h3 {
+  margin: 0 0 8px;
+  font-size: var(--heading-size-m); /* 19px */
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: none;
+  color: var(--text-color);
+}
+
+main .section.cards-container:has(.cards-card-body ul) .cards-card-body ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+main .section.cards-container:has(.cards-card-body ul) .cards-card-body ul li {
+  margin: 0 0 10px;
+  font-size: var(--body-font-size-m); /* 14px */
+  line-height: 1.15;
+}
+
+main .section.cards-container:has(.cards-card-body ul) .cards-card-body a {
+  font-size: var(--body-font-size-m);
+  font-weight: 400;
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+/* hover styling (red-hover + underline) inherited from global a:hover in styles.css */
+
+/* ===== Pattern 2: Equipment showcase (body has a paragraph) ===== */
+main .section.cards-container:has(.cards-card-body p) .cards > ul > li {
+  position: relative;
+  overflow: hidden;
+}
+
+main .section.cards-container:has(.cards-card-body p) .cards-card-image {
+  aspect-ratio: 610 / 261;
+}
+
+main .section.cards-container:has(.cards-card-body p) .cards-card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+main .section.cards-container:has(.cards-card-body p) .cards-card-body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 20px;
+  background-color: rgb(0 0 0 / 10%);
+  text-align: center;
+}
+
+main .section.cards-container:has(.cards-card-body p) .cards-card-body h3 {
+  margin: 5px 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--light-color);
+  text-shadow: 1px 2px 2px var(--text-color);
+}
+
+main .section.cards-container:has(.cards-card-body p) .cards-card-body h3 a {
+  color: var(--light-color);
+}
+
+main .section.cards-container:has(.cards-card-body p) .cards-card-body h3 a:hover {
+  color: var(--light-color);
+  text-decoration: underline;
+}
+
+main .section.cards-container:has(.cards-card-body p) .cards-card-body p {
+  margin: 0 0 12px;
+  font-size: var(--body-font-size-m);
+  line-height: 1.3;
+  color: var(--light-color);
+  text-shadow: 1px 2px 2px var(--text-color);
+}
+
+/* ===== Responsive column counts ===== */
+@media (width >= 600px) {
+  main .section.cards-container:has(.cards-card-body ul) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  main .section.cards-container {
+    padding: 0 24px;
+  }
+
+  main .section.cards-container:has(.cards-card-body ul) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  main .section.cards-container:has(.cards-card-body p) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  main .section.cards-container:has(.cards-card-body p) .cards-card-body h3 {
+    font-size: 40px;
+  }
+}
+
+@media (width >= 1200px) {
+  main .section.cards-container:has(.cards-card-body ul) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
