@@ -88,7 +88,17 @@ function findSectionElement(root, selectors) {
 }
 
 export default function transform(hookName, element, payload) {
-  if (hookName !== TransformHook.afterTransform) return;
+  // Run in beforeTransform (NOT afterTransform): the block parsers REPLACE their
+  // anchor elements (e.g. div.value-props → cards-trust block, div.faq-questions →
+  // accordion-faq block) during parsing, so by afterTransform those section
+  // anchors no longer exist and no <hr> gets inserted before them — merging them
+  // into the preceding section (and making styled sections bleed their style onto
+  // the next block). Inserting boundaries BEFORE parsing, while every anchor is
+  // still present, is robust: the <hr>/Section-Metadata nodes are inert siblings
+  // that match no parser selector, so they pass through parsing untouched.
+  // (In the import script's transformers array, cleanup runs before this in the
+  // same hook, so chrome is already gone when we resolve anchors.)
+  if (hookName !== TransformHook.beforeTransform) return;
 
   const template = payload && payload.template;
   const sections = template && template.sections;

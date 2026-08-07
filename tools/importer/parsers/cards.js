@@ -31,7 +31,25 @@ export default function parse(element, { document }) {
   // (equipment tile otherwise: .slide-container with an inner anchor + .slide-text)
 
   // ---- Column 1: image ---------------------------------------------------
-  const img = element.querySelector('img');
+  // Prefer a real <img>; equipment/salvage tiles instead carry the image as a
+  // CSS background-image on the .slide div (e.g.
+  //   <div class="slide" style="background-image:url('.../salvage-4.jpg')">),
+  // so synthesize an <img> from that URL when no <img> element exists.
+  let img = element.querySelector('img');
+  if (!img) {
+    const bgHost = element.querySelector('[style*="background-image"]')
+      || (element.getAttribute('style') && /background-image/i.test(element.getAttribute('style')) ? element : null);
+    if (bgHost) {
+      const style = bgHost.getAttribute('style') || '';
+      const match = style.match(/background-image\s*:\s*url\((['"]?)([^'")]+)\1\)/i);
+      if (match && match[2]) {
+        img = document.createElement('img');
+        img.setAttribute('src', match[2]);
+        const headingForAlt = element.querySelector('.slide-text h3, h3, h2');
+        img.setAttribute('alt', headingForAlt ? headingForAlt.textContent.trim() : '');
+      }
+    }
+  }
 
   // ---- Column 2: text ----------------------------------------------------
   const bodyEls = [];

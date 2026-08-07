@@ -156,7 +156,20 @@ var CustomImportScript = (() => {
   // tools/importer/parsers/cards.js
   function parse5(element, { document: document2 }) {
     const isSbc = element.matches(".sbc-category") || element.querySelector(".sbc-nav, .sbc-image");
-    const img = element.querySelector("img");
+    let img = element.querySelector("img");
+    if (!img) {
+      const bgHost = element.querySelector('[style*="background-image"]') || (element.getAttribute("style") && /background-image/i.test(element.getAttribute("style")) ? element : null);
+      if (bgHost) {
+        const style = bgHost.getAttribute("style") || "";
+        const match = style.match(/background-image\s*:\s*url\((['"]?)([^'")]+)\1\)/i);
+        if (match && match[2]) {
+          img = document2.createElement("img");
+          img.setAttribute("src", match[2]);
+          const headingForAlt = element.querySelector(".slide-text h3, h3, h2");
+          img.setAttribute("alt", headingForAlt ? headingForAlt.textContent.trim() : "");
+        }
+      }
+    }
     const bodyEls = [];
     if (isSbc) {
       const titleEl = element.querySelector(".sbc-nav-title");
@@ -293,6 +306,15 @@ var CustomImportScript = (() => {
         // Global footer shell (both pages) – EDS auto-populates footer
         "footer",
         ".page-footer",
+        // Copyright bar is a SIBLING that sits AFTER </footer> (not inside it), so
+        // it survives the 'footer' removal and otherwise leaks into the last content
+        // section of every page. EDS auto-populates the footer/copyright.
+        ".copyright-section",
+        // FAQ / content-info left jump-nav sidebar (ul.faqs-sidebar in
+        // .sidebar-additional) — a derived in-page anchor list, not authorable
+        // content; it leaks after the accordion group if not removed.
+        ".faqs-sidebar",
+        ".sidebar-additional",
         // Breadcrumbs (content-info) – belt-and-suspenders in case markup shifted
         ".breadcrumbs",
         // Any consent / widget subtree that survived
@@ -363,7 +385,7 @@ var CustomImportScript = (() => {
     return null;
   }
   function transform2(hookName, element, payload) {
-    if (hookName !== TransformHook2.afterTransform) return;
+    if (hookName !== TransformHook2.beforeTransform) return;
     const template = payload && payload.template;
     const sections = template && template.sections;
     if (!sections || !Array.isArray(sections) || sections.length < 2) return;

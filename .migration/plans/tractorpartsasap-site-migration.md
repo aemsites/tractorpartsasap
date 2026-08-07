@@ -63,9 +63,14 @@ Content-driven migration using the standard EDS import pipeline: **discover → 
 
 **Note:** Validation harness can't bind `WebImporter` global on this Magento/RequireJS source; parsers/transformers use the real API at import runtime with a verified fallback. Actual import run will confirm output (Step 6).
 
-### 6. Content Import
-- [ ] Run bulk import for the homepage + key template pages into `content/`
-- [ ] Verify generated HTML structure follows EDS section/block conventions
+### 6. Content Import ✅ DONE
+- [x] Run bulk import for homepage + content/info page into `content/` (`index.plain.html`, `faq.plain.html`)
+- [x] Verify generated HTML follows EDS section/block conventions
+
+**Import notes & fixes:**
+- Source is Magento/RequireJS: `window.define` is non-configurable, so the shared runner's `delete window.define` no-ops and the helix-importer bundle fails to bind `WebImporter` on the live URL. Worked around by importing from **script-stripped local copies** of each page (served on a local static server) — RequireJS never runs, bundle binds correctly. (Runner itself is outside the workspace / not editable; root cause documented.)
+- Fixed 4 post-import defects: (1) copyright bar (`.copyright-section`, sibling after `</footer>`) leaked → added to cleanup; (2) FAQ jump-nav (`.faqs-sidebar`) leaked → added to cleanup; (3) equipment cards had empty image cells (source uses CSS `background-image`, not `<img>`) → cards parser now synthesizes `<img>` from the bg URL (all 4 restored); (4) styled section bled into next block because section transformer ran in `afterTransform` after parsers replaced anchors → moved section boundary insertion to `beforeTransform`.
+- Final: Homepage = 5 sections (grey hero band, trust strip, 16 category cards, 4 equipment cards, About copy) + metadata. FAQ = hero + intro + 6 accordion-faq blocks + metadata. FAQ completeness 99.1%; homepage 76.4% (expected — deferred Finder placeholder + removed chrome). Lint clean.
 
 ### 7. Design System Migration
 - [ ] Extract design tokens (colors, typography, spacing) from the source site into `styles/`
