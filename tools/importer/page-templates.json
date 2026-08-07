@@ -170,6 +170,55 @@
           "defaultContent": []
         }
       ]
+    },
+    {
+      "name": "locations",
+      "urls": [
+        "https://www.tractorpartsasap.com/locations"
+      ],
+      "description": "Locations directory: page hero banner + a grid of retail store and salvage yard location cards (name, address, phone, More Info link). The live Google Map is deferred; the location list is captured from a script-stripped local snapshot.",
+      "blocks": [
+        {
+          "name": "hero",
+          "instances": [
+            "div.page-hero.locations",
+            "div.page-hero"
+          ]
+        },
+        {
+          "name": "locations",
+          "instances": [
+            "div.locations-list"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "page-hero",
+          "name": "Page hero",
+          "selector": [
+            "div.page-hero.locations",
+            "div.page-hero"
+          ],
+          "style": null,
+          "blocks": [
+            "hero"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "locations-directory",
+          "name": "Locations directory",
+          "selector": [
+            "div.locations-list"
+          ],
+          "style": null,
+          "blocks": [
+            "locations"
+          ],
+          "defaultContent": []
+        }
+      ]
     }
   ]
 }
