@@ -2,9 +2,9 @@
   "type": "da",
   "sites": {
     "tractorpartsasap": {
+      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json",
       "previewOrg": "aemsites",
-      "previewSite": "tractorpartsasap",
-      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json"
+      "previewSite": "tractorpartsasap"
     }
   }
 }

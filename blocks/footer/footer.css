@@ -1,20 +1,179 @@
+/*
+ * Footer — All States Ag Parts.
+ * Black background, white text. Top row of link columns (Company, Key
+ * Information, More to Know, Industry News + newsletter), a contact/social
+ * row (footer logo + address + social icons), and a copyright bar.
+ * Values extracted from tractorpartsasap.com computed styles.
+ */
+
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background-color: #000;
+  color: var(--light-color);
+  font-size: var(--body-font-size-m);
 }
 
-footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+footer .footer {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 40px 16px 24px;
+}
+
+footer .footer a:any-link {
+  color: var(--light-color);
+}
+
+footer .footer a:hover {
+  color: var(--brand-red-hover);
+  text-decoration: underline;
+}
+
+footer .footer h3 {
+  margin: 0 0 16px;
+  color: var(--light-color);
+  font-size: var(--heading-size-s); /* 16px */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 footer .footer p {
+  margin: 0 0 8px;
+}
+
+/* ===== Top row: link columns ===== */
+footer .footer-links {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgb(255 255 255 / 15%);
+}
+
+footer .footer-links ul {
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .footer-links li {
+  margin-bottom: 10px;
+  font-size: var(--body-font-size-m);
+}
+
+/* Newsletter */
+footer .footer-newsletter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  max-width: 320px;
+}
+
+footer .footer-newsletter-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+footer .footer-newsletter input[type='email'] {
+  flex: 1 1 180px;
+  min-width: 0;
+  height: 42px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 0 12px;
+  background-color: var(--light-color);
+  color: var(--text-color);
+  font-size: var(--body-font-size-s);
+}
+
+footer .footer-newsletter-submit {
+  height: 42px;
+  margin: 0;
+  border: 0;
+  border-radius: 2px;
+  padding: 0 20px;
+  background-color: var(--brand-red);
+  color: var(--light-color);
+  font-size: var(--body-font-size-s);
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+footer .footer-newsletter-submit:hover {
+  background-color: var(--brand-red-hover);
+}
+
+/* ===== Contact / social row ===== */
+footer .footer-contact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding: 32px 0;
+}
+
+footer .footer-contact img {
+  width: 160px;
+  height: auto;
+}
+
+footer .footer-contact p {
+  font-size: var(--body-font-size-m);
+}
+
+/* Social icons */
+footer .footer-social {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .footer-social a:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+footer .footer-social img {
+  width: 32px;
+  height: 32px;
+}
+
+/* ===== Copyright bar ===== */
+footer .footer-legal {
+  padding-top: 24px;
+  border-top: 1px solid rgb(255 255 255 / 15%);
+}
+
+footer .footer-legal p {
+  margin: 0;
+  font-size: var(--body-font-size-xs);
+  color: rgb(255 255 255 / 80%);
+}
+
+/* ===== Tablet / desktop ===== */
+@media (width >= 600px) {
+  footer .footer-links {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  footer .footer-contact {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+  }
 }
 
 @media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+  footer .footer {
+    padding: 48px 24px 24px;
+  }
+
+  footer .footer-links {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
