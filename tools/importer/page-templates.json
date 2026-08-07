@@ -1,0 +1,175 @@
+{
+  "metadata": {
+    "projectType": "da"
+  },
+  "templates": [
+    {
+      "name": "homepage",
+      "urls": [
+        "https://www.tractorpartsasap.com/"
+      ],
+      "description": "Site homepage: Find-Parts/promo hero band (deferred Homepage Finder placeholder + promo banner + quick-link tiles), value-props trust strip, Shop-by-Categories grid, Salvage/Equipment showcase, and About/SEO default copy.",
+      "blocks": [
+        {
+          "name": "widget",
+          "instances": [
+            ".part-finder",
+            ".homepage-finder",
+            ".amfinder-common-wrapper"
+          ]
+        },
+        {
+          "name": "hero",
+          "instances": [
+            "section.home-hero-section .home-hero .widget-cms-slideshow"
+          ]
+        },
+        {
+          "name": "cards-quicklinks",
+          "instances": [
+            "section.home-hero-section .featured-categories"
+          ]
+        },
+        {
+          "name": "cards-trust",
+          "instances": [
+            "div.value-props"
+          ]
+        },
+        {
+          "name": "cards",
+          "instances": [
+            "section.home-shop-by-categories .sbc-category",
+            "section.equipment-section .grid-cms-slider .slide-container"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "home-hero-band",
+          "name": "Find Parts / Promotional Hero band",
+          "selector": [
+            "section.home-hero-section"
+          ],
+          "style": "grey",
+          "blocks": [
+            "widget",
+            "hero",
+            "cards-quicklinks"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "value-props",
+          "name": "Value Props / Trust strip",
+          "selector": [
+            "div.value-props"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-trust"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "shop-by-categories",
+          "name": "Shop by Categories showcase",
+          "selector": [
+            "section.home-shop-by-categories"
+          ],
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "equipment-showcase",
+          "name": "Salvage / Equipment showcase",
+          "selector": [
+            "section.equipment-section"
+          ],
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "about-seo",
+          "name": "About / SEO copy",
+          "selector": [
+            "section.home-about-section"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "section.home-about-section"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "content-info",
+      "urls": [
+        "https://www.tractorpartsasap.com/faq"
+      ],
+      "description": "Content/info page template (covers ~178 static pages e.g. /faq, /shipping-and-returns, how-to articles): page hero banner + default editorial content (headings, paragraphs, inline images) + optional accordion-faq for expandable Q&A.",
+      "blocks": [
+        {
+          "name": "hero",
+          "instances": [
+            "div.page-hero.faq",
+            "div.page-hero"
+          ]
+        },
+        {
+          "name": "accordion-faq",
+          "instances": [
+            "div.faq-questions .faq-results",
+            "div.faq-questions"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "page-hero",
+          "name": "Page hero",
+          "selector": [
+            "div.page-hero.faq",
+            "div.page-hero"
+          ],
+          "style": null,
+          "blocks": [
+            "hero"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "intro-callout",
+          "name": "Intro / contact callout",
+          "selector": [
+            "div.faq-contacts"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.faq-contacts"
+          ]
+        },
+        {
+          "id": "faq-accordion",
+          "name": "FAQ accordion",
+          "selector": [
+            "div.faq-questions"
+          ],
+          "style": null,
+          "blocks": [
+            "accordion-faq"
+          ],
+          "defaultContent": []
+        }
+      ]
+    }
+  ]
+}

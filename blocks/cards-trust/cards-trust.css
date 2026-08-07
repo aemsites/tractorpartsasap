@@ -1,0 +1,73 @@
+/*
+ * cards-trust — horizontal value-proposition / trust bar.
+ * Base cards markup (image/icon + text) rendered as an inline, borderless
+ * row of items separated by vertical dividers rather than a bordered grid.
+ * Small icon on top, bold title, one-line subtext beneath.
+ */
+
+.cards-trust > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0;
+}
+
+.cards-trust > ul > li {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 24px;
+  border: 0;
+  background-color: transparent;
+}
+
+/* vertical divider between items (not before the first) */
+.cards-trust > ul > li + li {
+  border-left: 1px solid #dadada;
+}
+
+.cards-trust .cards-trust-card-image {
+  line-height: 0;
+  margin-bottom: 8px;
+}
+
+.cards-trust .cards-trust-card-image img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.cards-trust .cards-trust-card-body {
+  margin: 0;
+}
+
+.cards-trust .cards-trust-card-body p {
+  margin: 0;
+}
+
+.cards-trust .cards-trust-card-body strong,
+.cards-trust .cards-trust-card-body h1,
+.cards-trust .cards-trust-card-body h2,
+.cards-trust .cards-trust-card-body h3,
+.cards-trust .cards-trust-card-body h4 {
+  font-size: var(--body-font-size-m);
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+@media (width <= 600px) {
+  .cards-trust > ul > li {
+    flex-basis: 100%;
+  }
+
+  .cards-trust > ul > li + li {
+    border-left: 0;
+    border-top: 1px solid #dadada;
+  }
+}

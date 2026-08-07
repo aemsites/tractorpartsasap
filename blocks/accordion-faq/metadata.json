@@ -1,0 +1,43 @@
+{
+  "variantName": "accordion-faq",
+  "baseBlock": "accordion",
+  "version": "1.0.0",
+  "created": "2026-08-06T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.tractorpartsasap.com/faq",
+    "originPage": "FAQ (content/info page template)",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "faq",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "question (title) + rich-text answer (paragraphs, lists, inline links, optional 'Read More' link)",
+    "buttonCount": 0,
+    "imageCount": 0,
+    "itemCount": 17,
+    "layout": "vertical bordered collapsible items grouped under H3 category headings"
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "FAQ / question-and-answer pages",
+      "expandable/collapsible help content on content/info pages",
+      "categorized Q&A grouped under section headings",
+      "any content page with 'show more' style disclosure sections"
+    ],
+    "notSuitableFor": [
+      "content that must all be visible at once (use default content or columns)",
+      "media-led or image card grids (use cards)",
+      "tabular data (use table)",
+      "side-by-side comparisons (use columns)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/faq"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-06T00:00:00.000Z"
+  }
+}

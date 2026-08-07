@@ -1,0 +1,41 @@
+{
+  "variantName": "cards-trust",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-08-06T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.tractorpartsasap.com/",
+    "originPage": "homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "trust",
+    "imagePattern": "icon"
+  },
+  "contentPattern": {
+    "structure": "icon + title + subtext",
+    "buttonCount": 0,
+    "imageCount": 1,
+    "itemCount": 3,
+    "layout": "horizontal-divided-bar"
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "value proposition / trust bars",
+      "3-4 up feature strips with icon + short label + subtext",
+      "'why choose us' rows"
+    ],
+    "notSuitableFor": [
+      "image-led card grids",
+      "product/category tiles with descriptions and CTAs",
+      "large content cards"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-06T00:00:00.000Z"
+  }
+}

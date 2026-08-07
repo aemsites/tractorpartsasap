@@ -1,8 +1,10 @@
 {
+  "type": "da",
   "sites": {
     "tractorpartsasap": {
       "previewOrg": "aemsites",
-      "previewSite": "tractorpartsasap"
+      "previewSite": "tractorpartsasap",
+      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json"
     }
   }
 }

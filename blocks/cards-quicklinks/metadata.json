@@ -1,0 +1,41 @@
+{
+  "variantName": "cards-quicklinks",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-08-06T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.tractorpartsasap.com/",
+    "originPage": "homepage",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "quick-links",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "link-only tile",
+    "buttonCount": 0,
+    "imageCount": 0,
+    "itemCount": 3,
+    "layout": "horizontal-bordered-tiles"
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "short rows of text-only navigational shortcut tiles",
+      "'jump to' or featured-category link bars",
+      "bordered link buttons without imagery"
+    ],
+    "notSuitableFor": [
+      "cards with images",
+      "cards with descriptions or long body copy",
+      "single primary call-to-action"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-06T00:00:00.000Z"
+  }
+}
