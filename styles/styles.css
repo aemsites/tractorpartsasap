@@ -312,6 +312,25 @@ main .section.highlight {
   padding: 40px 0;
 }
 
+/*
+ * About / SEO copy section — the source renders this editorial block on a
+ * full-width WHITE band (home-about-section, #fff). It is the only homepage
+ * section that is pure default content (a single .default-content-wrapper with
+ * no block), so target that: full-bleed white with the copy centred via
+ * padding-inline. Excludes the first section (never this one).
+ */
+main > .section:not(:first-of-type):has(> .default-content-wrapper:only-child) {
+  margin: 0;
+  padding: 40px max(16px, calc((100% - var(--content-max-width)) / 2));
+  background-color: var(--light-color);
+}
+
+main > .section:not(:first-of-type):has(> .default-content-wrapper:only-child) > .default-content-wrapper {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* grey band — matches the source's light-grey Find-Parts hero section */
 main .section.grey {
   background-color: var(--background-color);

@@ -7,8 +7,7 @@
  * All values extracted from source computed styles.
  */
 
-/* Full-bleed white band: break out of the section's max-width wrapper.
- * Higher specificity than global `main > .section > div` so the white band
+/* Full-bleed band: break out of the section's max-width wrapper so the strip
  * spans the full viewport width as it does on the source. */
 main > .section > .cards-trust-wrapper {
   max-width: none;
@@ -16,7 +15,8 @@ main > .section > .cards-trust-wrapper {
 }
 
 .cards-trust {
-  background-color: var(--light-color); /* #fff */
+  /* Source value-props band sits on the page grey (#f4f4f4), not white. */
+  background-color: transparent;
   padding: 48px 0;
 }
 

@@ -18,6 +18,16 @@ main .section.cards-container {
   padding: 0 16px;
 }
 
+/* Shop-by-Categories sits on a full-width WHITE band on the source (the grid is
+ * wrapped in a white .home-sbcategories). Make the section full-bleed white and
+ * centre the grid content with padding-inline instead of max-width+margin. */
+main .section.cards-container:has(.cards-card-body ul) {
+  max-width: none;
+  margin: 0;
+  padding: 40px max(16px, calc((100% - var(--content-max-width)) / 2));
+  background-color: var(--light-color);
+}
+
 /* neutralise the per-wrapper max-width/centering the global section rule applies */
 main .section.cards-container > .cards-wrapper {
   max-width: none;
@@ -166,6 +176,7 @@ main .section.cards-container:has(.cards-card-body p) .cards-card-body p {
 
   main .section.cards-container:has(.cards-card-body ul) {
     grid-template-columns: repeat(3, 1fr);
+    padding: 40px max(24px, calc((100% - var(--content-max-width)) / 2));
   }
 
   main .section.cards-container:has(.cards-card-body p) {

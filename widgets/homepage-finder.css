@@ -9,7 +9,7 @@
 .homepage-finder .homepage-finder-inner {
   box-sizing: border-box;
   padding: 24px;
-  background-color: var(--dark-color);
+  background-color: #575757; /* medium grey Find-Parts panel, matches source */
   color: var(--light-color);
 }
 
