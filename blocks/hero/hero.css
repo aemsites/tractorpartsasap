@@ -1,8 +1,10 @@
 /*
- * hero — page banner. Two cases:
- *   1. With a <picture>: the image fills the band behind centered white text.
- *   2. Without an image (e.g. FAQ page title): a dark fallback band keeps the
- *      white heading readable, approximating the source's dark photo banner.
+ * hero — page banner. Two variants:
+ *   1. Text hero (default): heading/copy centered over a dark band. Used for
+ *      page titles like the FAQ "We're here to help".
+ *   2. Image hero (.hero-image, set by hero.js when the cell holds only an
+ *      image): the image renders as a full-width foreground banner, optionally
+ *      wrapped in a link — no dark band, no text.
  * Values from tractorpartsasap.com computed styles (white h1, 800, centered).
  */
 
@@ -23,6 +25,7 @@
   text-align: center;
 }
 
+/* ===== Text hero (default) ===== */
 .hero h1,
 .hero h2 {
   max-width: 1200px;
@@ -52,6 +55,30 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+/* ===== Image hero: full-width clickable banner, no band/text ===== */
+.hero.hero-image {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.hero.hero-image .hero-image-link {
+  display: block;
+}
+
+.hero.hero-image picture {
+  position: static;
+  display: block;
+}
+
+.hero.hero-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 }
 
 @media (width >= 900px) {
