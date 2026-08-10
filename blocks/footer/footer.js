@@ -31,6 +31,61 @@ function buildNewsletter() {
 }
 
 /**
+ * Regroups a footer row into explicit column elements.
+ *
+ * Section decoration collapses the authored column <div>s into a single
+ * `.default-content-wrapper` holding a flat run of `h3 + ul/p …`, which makes
+ * the grid see only one child (so every column stacks into the first cell).
+ * Rebuild real columns from that flat content: a new column begins at a
+ * heading boundary; any content before the first heading joins the first
+ * column.
+ * @param {Element} row The footer row element (grid container)
+ * @param {string} colClass Class applied to each rebuilt column
+ * @param {{splitAtLastHeadingOnly?: boolean}} [opts] When
+ *   `splitAtLastHeadingOnly` is set, only the final heading starts a new
+ *   column (for the contact row, whose first column itself contains a heading).
+ */
+function regroupColumns(row, colClass, opts = {}) {
+  // Flatten one level of wrappers (.default-content-wrapper) so we operate on
+  // the real content nodes regardless of how decoration grouped them.
+  row.querySelectorAll(':scope > .default-content-wrapper').forEach((w) => {
+    w.replaceWith(...w.childNodes);
+  });
+
+  const nodes = [...row.childNodes];
+  const headings = nodes.filter(
+    (n) => n.nodeType === Node.ELEMENT_NODE && /^H[1-6]$/.test(n.tagName),
+  );
+  // The set of headings that begin a new column.
+  const boundaryHeadings = opts.splitAtLastHeadingOnly
+    ? new Set(headings.slice(-1))
+    : new Set(headings);
+
+  row.textContent = '';
+
+  const columns = [];
+  let current = null;
+  const startColumn = () => {
+    current = document.createElement('div');
+    current.className = colClass;
+    columns.push(current);
+  };
+
+  nodes.forEach((node) => {
+    const startsColumn = boundaryHeadings.has(node);
+    // Begin a fresh column at a boundary heading, or when the first real
+    // element arrives; ignore stray whitespace-only text before column 1.
+    if (startsColumn || (!current && node.nodeType === Node.ELEMENT_NODE)) {
+      startColumn();
+    }
+    if (current) current.append(node);
+  });
+
+  columns.forEach((col) => row.append(col));
+  return columns;
+}
+
+/**
  * loads and decorates the footer
  * @param {Element} block The footer block element
  */
@@ -55,9 +110,19 @@ export default async function decorate(block) {
   if (rows[1]) rows[1].classList.add('footer-contact');
   if (rows[2]) rows[2].classList.add('footer-legal');
 
+  // Rebuild explicit columns for the link row so the grid can place each
+  // column (decoration otherwise flattens them into one cell). The link row
+  // splits cleanly at every heading (one heading + one list per column).
+  if (rows[0]) regroupColumns(rows[0], 'footer-col');
+
+  // The contact row has two columns — [logo + "Contact Us" + address/email]
+  // and ["Stay Connected" + social] — so it must split only at the LAST
+  // heading (the "Stay Connected" one), not at "Contact Us" in the middle.
+  if (rows[1]) regroupColumns(rows[1], 'footer-contact-col', { splitAtLastHeadingOnly: true });
+
   // The "Industry News" column gets a newsletter form appended.
-  const columns = rows[0] ? [...rows[0].children] : [];
-  const newsletterCol = columns.find((col) => {
+  const linkCols = rows[0] ? [...rows[0].children] : [];
+  const newsletterCol = linkCols.find((col) => {
     const h = col.querySelector('h3');
     return h && /industry news/i.test(h.textContent);
   });
