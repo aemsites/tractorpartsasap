@@ -49,7 +49,8 @@ main > .section > .cards-trust-wrapper {
 }
 
 .cards-trust .cards-trust-card-image img {
-  width: auto;
+  /* Fixed box reserves space before the icon loads to avoid layout shift (CLS). */
+  width: 50px;
   height: 50px;
   object-fit: contain;
 }

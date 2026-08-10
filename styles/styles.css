@@ -13,8 +13,10 @@
 @import url("brand.css");
 
 :root {
-  /* nav height */
-  --nav-height: 64px;
+  /* nav height — reserves header space before the lazy header hydrates to
+   * avoid CLS. Matches the real two-band nav: ~183px mobile, ~133px desktop
+   * (desktop override below). */
+  --nav-height: 183px;
 
   /* heading sizes — aliases onto brand.css tokens (mobile-first defaults) */
   --heading-font-size-xxl: 32px;
@@ -34,6 +36,9 @@
 
 @media (width >= 900px) {
   :root {
+    /* desktop two-band nav is shorter (single-row main bar) */
+    --nav-height: 133px;
+
     /* heading sizes — desktop, from brand.css tokens */
     --heading-font-size-xxl: var(--heading-size-xxl);
     --heading-font-size-xl: var(--heading-size-xl);

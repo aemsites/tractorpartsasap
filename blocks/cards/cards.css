@@ -47,12 +47,17 @@ main .section.cards-container:has(.cards-card-body ul) .cards > ul > li {
 main .section.cards-container:has(.cards-card-body ul) .cards-card-image {
   flex: 0 0 46%;
   line-height: 0;
+
+  /* Reserve space before the image loads to avoid layout shift (CLS).
+   * Category thumbnails share a ~135x166 portrait ratio on the source. */
+  aspect-ratio: 135 / 166;
 }
 
 main .section.cards-container:has(.cards-card-body ul) .cards-card-image img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
 }
 
 main .section.cards-container:has(.cards-card-body ul) .cards-card-body {

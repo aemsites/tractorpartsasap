@@ -9,16 +9,19 @@
 
 /*
  * Sticky header. The whole <header> sticks (its containing block is <body>, so
- * it stays pinned through the full page) and takes its natural height — the
- * boilerplate's fixed `header { height: var(--nav-height) }` (64px) is too short
- * for our two-band nav (~133px desktop / ~183px mobile) and would let the first
- * section tuck underneath, so we override it to auto here.
+ * it stays pinned through the full page). It takes its natural height once the
+ * nav hydrates, but we RESERVE that height up front with min-height so the page
+ * below doesn't shift down when the (lazy-loaded) header appears — the
+ * boilerplate's fixed `header { height: var(--nav-height) }` would otherwise
+ * hold only 64px and let content jump (CLS). --nav-height is set to the real
+ * two-band nav height (mobile default; desktop override in the media query).
  */
 header {
   position: sticky;
   top: 0;
   z-index: 20;
   height: auto;
+  min-height: var(--nav-height);
 }
 
 header .nav-wrapper {
