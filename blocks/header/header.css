@@ -7,11 +7,22 @@
  * Values extracted from tractorpartsasap.com computed styles.
  */
 
-header .nav-wrapper {
-  width: 100%;
-  z-index: 20;
+/*
+ * Sticky header. The whole <header> sticks (its containing block is <body>, so
+ * it stays pinned through the full page) and takes its natural height — the
+ * boilerplate's fixed `header { height: var(--nav-height) }` (64px) is too short
+ * for our two-band nav (~133px desktop / ~183px mobile) and would let the first
+ * section tuck underneath, so we override it to auto here.
+ */
+header {
   position: sticky;
   top: 0;
+  z-index: 20;
+  height: auto;
+}
+
+header .nav-wrapper {
+  width: 100%;
   background-color: var(--light-color);
   box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
 }
