@@ -313,3 +313,48 @@ main .section.grey {
   margin: 0;
   padding: 32px 0;
 }
+
+/*
+ * Homepage hero band layout. On desktop the Find-Parts widget sits on the left
+ * with the promo hero + quick-link tiles stacked on the right, mirroring the
+ * source. Scoped to the unique container-class combination this band produces.
+ * The grey background stays full-bleed while the grid content is centred via
+ * padding-inline (so max-width applies to content, not the coloured band).
+ */
+@media (width >= 900px) {
+  main .section.homepage-finder-container.hero-container {
+    display: grid;
+    grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+    grid-template-areas:
+      'finder hero'
+      'finder links';
+    align-items: start;
+    gap: 20px 32px;
+    padding-block: 32px;
+    padding-inline: max(24px, calc((100% - var(--content-max-width)) / 2));
+  }
+
+  /* neutralise the global per-wrapper max-width/margin/padding so the grid controls layout */
+  main .section.homepage-finder-container.hero-container > div {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  main .section.homepage-finder-container.hero-container .homepage-finder-wrapper {
+    grid-area: finder;
+  }
+
+  main .section.homepage-finder-container.hero-container .hero-wrapper {
+    grid-area: hero;
+  }
+
+  main .section.homepage-finder-container.hero-container .cards-quicklinks-wrapper {
+    grid-area: links;
+  }
+
+  /* section-metadata wrapper only exists in local preview; keep it out of the grid */
+  main .section.homepage-finder-container.hero-container .section-metadata-wrapper {
+    display: none;
+  }
+}
