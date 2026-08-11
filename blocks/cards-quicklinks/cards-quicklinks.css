@@ -16,7 +16,7 @@
 .cards-quicklinks > ul > li {
   flex: 1 1 160px;
   border: 1px solid #dadada;
-  background-color: var(--background-color);
+  background-color: var(--light-color);
   text-align: center;
 }
 
