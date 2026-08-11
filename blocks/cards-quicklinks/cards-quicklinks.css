@@ -4,6 +4,15 @@
  * bordered box, displayed side by side. Used for short "jump to" links.
  */
 
+/* Match the hero above: drop the section's default side gutter so the white
+ * band spans the full width of the hero. Tiles stay inset via the block's own
+ * padding. Uses the container class for enough specificity to beat the global
+ * `main > .section > div` rule (same approach the hero uses). */
+.cards-quicklinks-container .cards-quicklinks-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
 .cards-quicklinks {
   background-color: var(--light-color);
   padding: 16px;
