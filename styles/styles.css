@@ -353,7 +353,11 @@ main .section.grey {
       'finder hero'
       'finder links';
     align-items: start;
-    gap: 20px 32px;
+
+    /* No ROW gap: the gap between the hero and quicklinks would expose the grey
+     * section band. Keep the 32px COLUMN gap; the hero→quicklinks separation is
+     * recreated as white space via the quicklinks block's top padding below. */
+    gap: 0 32px;
     padding-block: 32px;
     padding-inline: max(24px, calc((100% - var(--content-max-width)) / 2));
   }
