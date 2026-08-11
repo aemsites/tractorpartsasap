@@ -367,6 +367,10 @@ main .section.grey {
 
   main .section.homepage-finder-container.hero-container .homepage-finder-wrapper {
     grid-area: finder;
+
+    /* span the full height of the hero + quicklinks column (overrides the
+     * grid's align-items: start so the panel fills both rows) */
+    align-self: stretch;
   }
 
   main .section.homepage-finder-container.hero-container .hero-wrapper {

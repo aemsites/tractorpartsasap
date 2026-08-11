@@ -6,10 +6,23 @@
  * Dark card matching the source's Find-Parts panel.
  */
 
+/* Fill the full height the widget is given (on desktop it spans the hero +
+ * quicklinks column; see styles.css). */
+.homepage-finder,
+.homepage-finder .homepage-finder-inner {
+  height: 100%;
+}
+
 .homepage-finder .homepage-finder-inner {
   box-sizing: border-box;
   padding: 24px;
-  background-color: #575757; /* medium grey Find-Parts panel, matches source */
+
+  /* medium grey Find-Parts panel with the source's photographic overlay */
+  background-color: #575757;
+  background-image: url("./finder-panel-bg.jpg");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
   color: var(--light-color);
 }
 
