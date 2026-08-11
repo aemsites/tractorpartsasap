@@ -12,21 +12,24 @@
  * @param {Element} block The hero block element
  */
 export default function decorate(block) {
-  const picture = block.querySelector('picture');
+  // The image may arrive as an optimized <picture> (aem.live backend) or as a
+  // bare <img> (hand-authored content / local preview). Prefer the <picture>
+  // wrapper when present so we move the whole element, not just the <img>.
+  const media = block.querySelector('picture') || block.querySelector('img');
   const heading = block.querySelector('h1, h2, h3, h4, h5, h6');
 
   // Image hero: an image is present and there's no heading/body text.
-  if (picture && !heading) {
+  if (media && !heading) {
     // Is the image already wrapped in a link (author linked the image)?
-    const existingLink = picture.closest('a[href]');
+    const existingLink = media.closest('a[href]');
     let link = null;
     if (existingLink && block.contains(existingLink)) {
       link = existingLink;
     } else {
       // A bare link sometimes lands as a sibling (its text is the URL); use its
-      // href to wrap the picture, then drop the now-empty text link.
+      // href to wrap the image, then drop the now-empty text link.
       const siblingLink = block.querySelector('a[href]');
-      if (siblingLink && !siblingLink.querySelector('picture')) {
+      if (siblingLink && !siblingLink.contains(media)) {
         link = document.createElement('a');
         link.href = siblingLink.getAttribute('href');
         siblingLink.remove();
@@ -36,10 +39,10 @@ export default function decorate(block) {
     if (link) {
       link.classList.add('hero-image-link');
       link.textContent = '';
-      link.append(picture);
+      link.append(media);
       block.replaceChildren(link);
     } else {
-      block.replaceChildren(picture);
+      block.replaceChildren(media);
     }
 
     block.classList.add('hero-image');
