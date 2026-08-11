@@ -10,6 +10,9 @@ import {
   loadSections,
   loadCSS,
   buildBlock,
+  readBlockConfig,
+  toClassName,
+  toCamelCase,
 } from './aem.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
@@ -143,6 +146,39 @@ function decorateButtons(main) {
 }
 
 /**
+ * Consumes any `section-metadata` block: reads its key/value rows, applies them
+ * to the containing section, and removes the block. On the aem.live backend this
+ * happens server-side, but locally (`--html-folder` / DA preview) the raw block
+ * is delivered, so we replicate the behaviour here. A `style` value becomes one
+ * or more classes on the section (matching the boilerplate); other keys are
+ * stored as `data-*` on the section. Without this the block renders its raw
+ * "style"/"grey" text and aem.js tries to load a non-existent block module.
+ * @param {Element} main The main element
+ */
+function decorateSectionMetadata(main) {
+  main.querySelectorAll(':scope > .section').forEach((section) => {
+    // decorateSections has already wrapped each block, so the section-metadata
+    // block sits inside a wrapper div rather than being a direct child.
+    const blockEl = section.querySelector('div.section-metadata');
+    if (!blockEl) return;
+    const meta = readBlockConfig(blockEl);
+    Object.keys(meta).forEach((key) => {
+      if (key === 'style') {
+        const styles = meta.style
+          .split(',')
+          .map((style) => toClassName(style.trim()))
+          .filter((style) => style);
+        styles.forEach((style) => section.classList.add(style));
+      } else {
+        section.dataset[toCamelCase(key)] = meta[key];
+      }
+    });
+    // remove the wrapper so the section collapses back to its remaining content
+    blockEl.parentElement.remove();
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -151,6 +187,7 @@ export function decorateMain(main) {
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
+  decorateSectionMetadata(main);
   decorateBlocks(main);
   decorateButtons(main);
 }
