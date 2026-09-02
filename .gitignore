@@ -8,6 +8,9 @@ helix-importer-ui
 *.bak
 .idea
 
+# Ignore .map files in scripts/__dropins__/ directory and all its subdirectories
+scripts/__dropins__/**/*.map
+
 # Ensure these files are tracked
 !CLAUDE.md
 !AGENTS.md
