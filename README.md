@@ -32,3 +32,9 @@ npm run lint
 1. Install the [AEM CLI](https://github.com/adobe/helix-cli): `npm install -g @adobe/aem-cli`
 1. Start AEM Proxy: `aem up` (opens your browser at `http://localhost:3000`)
 1. Open the `{repo}` directory in your favorite IDE and start coding :)
+
+### PDP Development
+
+1. Follow above steps
+1. Use `aem up --url http://main--tractorpartsasap--aemsites.aem.network`
+1. Open a PDP page like `http://localhost:3000/used-1988-john-deere-7720-combine-parts-eq-39407`

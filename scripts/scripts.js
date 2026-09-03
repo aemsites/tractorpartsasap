@@ -14,6 +14,10 @@ import {
   toClassName,
   toCamelCase,
 } from './aem.js';
+import {
+  buildProductDetailsBlock,
+  loadCommerceEager,
+} from './commerce.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -201,7 +205,14 @@ async function loadEager(doc) {
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
+    await buildProductDetailsBlock(main);
     decorateMain(main);
+    try {
+      await loadCommerceEager();
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Error loading commerce content:', e);
+    }
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
