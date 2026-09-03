@@ -26,9 +26,6 @@
         "adobe_productbus": {
           "origin": "pipeline-cloudflare.adobecommerce.live",
           "pathPrefix": "/aemsites/tractorpartsasap/main/"
-        },
-        "adobe_edge": {
-          "origin": "main--tractorpartsasap--aemsites.aem.live"
         }
       }
     }
