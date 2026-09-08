@@ -4,6 +4,7 @@ import { buildBlock, getMetadata } from './aem.js';
 // sku (e.g. 404.html) never need to resolve `@dropins/*` module specifiers.
 let csFetchGraphQL = null;
 let productDataPromise = null;
+let ssrGalleryImages = [];
 
 /**
  * Returns the Catalog Service Fetch GraphQL instance, configured by
@@ -22,6 +23,34 @@ export function getFetchGraphQL() {
  */
 export function getProductDataPromise() {
   return productDataPromise;
+}
+
+/**
+ * Returns the <picture> elements captured from the server-rendered
+ * product-bus markup before it was stripped (empty if none were found).
+ * These are the actual elements (detached from the document, not clones),
+ * safe to re-insert elsewhere in the DOM.
+ * @returns {Element[]}
+ */
+export function getSsrGalleryImages() {
+  return ssrGalleryImages;
+}
+
+/**
+ * Pulls the <picture> elements out of a product-bus generated section before
+ * it's discarded, so they can be reused as-is (already-optimized srcset, alt
+ * text, and all) to build the product gallery, instead of waiting on the
+ * Catalog Service API, which resolves product images to different (and, at
+ * time of writing, slower) CDN URLs than the ones product-bus ingestion
+ * already put in the SSR markup (see
+ * https://docs.adobecommerce.live/image-processing). The section is removed
+ * right after this runs, so there's no need to clone - just take the actual
+ * elements.
+ * @param {Element} section A generated section about to be removed
+ * @returns {Element[]}
+ */
+function extractSsrGalleryImages(section) {
+  return [...section.querySelectorAll('picture')];
 }
 
 /**
@@ -199,10 +228,15 @@ export async function buildProductDetailsBlock(main) {
   }
   if (!product) return;
 
+  ssrGalleryImages = [];
+
   // product bus variant sections have data-sku before decorateMain runs
   const isGenerated = (section) => !section.querySelector(':scope > div[class]') || section.dataset.sku;
   let section = main.querySelector(':scope > div:first-child');
   while (section && isGenerated(section)) {
+    if (!ssrGalleryImages.length) {
+      ssrGalleryImages = extractSsrGalleryImages(section);
+    }
     const next = section.nextElementSibling;
     section.remove();
     section = next;

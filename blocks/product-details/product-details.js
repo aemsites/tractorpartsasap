@@ -8,6 +8,9 @@ import ProductDescription from '@dropins/storefront-pdp/containers/ProductDescri
 import ProductAttributes from '@dropins/storefront-pdp/containers/ProductAttributes.js';
 import ProductGallery from '@dropins/storefront-pdp/containers/ProductGallery.js';
 
+import { getSsrGalleryImages } from '../../scripts/commerce.js';
+import renderSsrGallery from './ssr-gallery.js';
+
 const IMAGE_SIZES = {
   width: 960,
   height: 1191,
@@ -48,13 +51,23 @@ export default async function decorate(block) {
 
   block.replaceChildren(fragment);
 
+  // Product-bus pages already render the gallery images into the SSR
+  // markup (captured before that markup was stripped, see
+  // scripts/commerce.js:buildProductDetailsBlock). Reuse them directly
+  // instead of waiting on the dropin to query Catalog Service and render
+  // its own (differently-hosted, slower) image URLs. See
+  // https://docs.adobecommerce.live/image-processing
+  const ssrGalleryImages = getSsrGalleryImages();
+
   await Promise.all([
-    pdpRendered.render(ProductGallery, {
-      controls: 'dots',
-      arrows: true,
-      gap: 'small',
-      imageParams: { ...IMAGE_SIZES },
-    })($gallery),
+    ssrGalleryImages.length
+      ? renderSsrGallery(ssrGalleryImages)($gallery)
+      : pdpRendered.render(ProductGallery, {
+        controls: 'dots',
+        arrows: true,
+        gap: 'small',
+        imageParams: { ...IMAGE_SIZES },
+      })($gallery),
     pdpRendered.render(ProductHeader, {})($header),
     pdpRendered.render(ProductPrice, {})($price),
     pdpRendered.render(ProductShortDescription, {})($shortDescription),

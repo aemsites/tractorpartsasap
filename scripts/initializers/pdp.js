@@ -7,6 +7,7 @@ import {
   fetchPlaceholders,
   getProductSku,
   getProductDataPromise,
+  getSsrGalleryImages,
 } from '../commerce.js';
 import { getMetadata } from '../aem.js';
 
@@ -25,7 +26,8 @@ function preloadFile(href, as) {
 }
 
 /**
- * Extracts the main product image URL from JSON-LD or meta tags
+ * Extracts the main product image URL from JSON-LD or meta tags. Fallback
+ * for when no SSR gallery image was captured (see getSsrGalleryImages).
  * @returns {string|null} The image URL or null if not found
  */
 function extractMainImageUrl() {
@@ -61,7 +63,16 @@ function preloadPDPAssets() {
   preloadFile('/scripts/__dropins__/storefront-pdp/containers/ProductAttributes.js', 'script');
   preloadFile('/scripts/__dropins__/storefront-pdp/containers/ProductGallery.js', 'script');
 
-  const imageUrl = extractMainImageUrl();
+  // Prefer the image already rendered into the SSR/product-bus body (the
+  // exact URL the gallery will actually use, see ssr-gallery.js) over
+  // JSON-LD/meta tags, which may point to a different URL.
+  const [firstSsrPicture] = getSsrGalleryImages();
+  if (!firstSsrPicture) {
+    // If no gallery is pre-rendered, we will use the dropin container later, so preload it.
+    preloadFile('/scripts/__dropins__/storefront-pdp/containers/ProductGallery.js', 'script');
+  }
+
+  const imageUrl = firstSsrPicture?.querySelector('img')?.src || extractMainImageUrl();
   if (imageUrl) {
     preloadFile(imageUrl, 'image');
   } else {
