@@ -198,6 +198,33 @@ export function getProductSku() {
   return getMetadata('sku');
 }
 
+// product bus variant sections have data-sku before decorateMain runs
+const isGeneratedSection = (section) => !section.querySelector(':scope > div[class]') || section.dataset.sku;
+
+/**
+ * Marks the first image of the product-bus generated content as a priority
+ * LCP candidate, synchronously and before any async work (product data
+ * fetch, dropin imports) runs. The image is otherwise stuck at
+ * `loading="lazy"` - as rendered by product-bus - until
+ * extractSsrGalleryImages/renderSsrGallery re-marks it after that async work
+ * resolves, which needlessly delays the browser fetching it by however long
+ * that work takes. This leaves the section itself untouched (no removal),
+ * since that still depends on whether product data comes back.
+ * @param {Element} main The main element
+ */
+function prioritizeFirstGalleryImage(main) {
+  let section = main.querySelector(':scope > div:first-child');
+  while (section && isGeneratedSection(section)) {
+    const img = section.querySelector('picture img');
+    if (img) {
+      img.loading = 'eager';
+      img.setAttribute('fetchpriority', 'high');
+      return;
+    }
+    section = section.nextElementSibling;
+  }
+}
+
 /**
  * Ensures a product-details block is present on any page with a sku meta tag,
  * but only once real product data is confirmed to exist for that sku. On
@@ -213,6 +240,8 @@ export function getProductSku() {
 export async function buildProductDetailsBlock(main) {
   const sku = getProductSku();
   if (!sku) return;
+
+  prioritizeFirstGalleryImage(main);
 
   let product;
   try {
@@ -230,10 +259,8 @@ export async function buildProductDetailsBlock(main) {
 
   ssrGalleryImages = [];
 
-  // product bus variant sections have data-sku before decorateMain runs
-  const isGenerated = (section) => !section.querySelector(':scope > div[class]') || section.dataset.sku;
   let section = main.querySelector(':scope > div:first-child');
-  while (section && isGenerated(section)) {
+  while (section && isGeneratedSection(section)) {
     if (!ssrGalleryImages.length) {
       ssrGalleryImages = extractSsrGalleryImages(section);
     }
