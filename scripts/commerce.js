@@ -4,7 +4,6 @@ import { buildBlock, getMetadata } from './aem.js';
 // sku (e.g. 404.html) never need to resolve `@dropins/*` module specifiers.
 let csFetchGraphQL = null;
 let productDataPromise = null;
-let ssrGalleryImages = [];
 
 /**
  * Returns the Catalog Service Fetch GraphQL instance, configured by
@@ -23,34 +22,6 @@ export function getFetchGraphQL() {
  */
 export function getProductDataPromise() {
   return productDataPromise;
-}
-
-/**
- * Returns the <picture> elements captured from the server-rendered
- * product-bus markup before it was stripped (empty if none were found).
- * These are the actual elements (detached from the document, not clones),
- * safe to re-insert elsewhere in the DOM.
- * @returns {Element[]}
- */
-export function getSsrGalleryImages() {
-  return ssrGalleryImages;
-}
-
-/**
- * Pulls the <picture> elements out of a product-bus generated section before
- * it's discarded, so they can be reused as-is (already-optimized srcset, alt
- * text, and all) to build the product gallery, instead of waiting on the
- * Catalog Service API, which resolves product images to different (and, at
- * time of writing, slower) CDN URLs than the ones product-bus ingestion
- * already put in the SSR markup (see
- * https://docs.adobecommerce.live/image-processing). The section is removed
- * right after this runs, so there's no need to clone - just take the actual
- * elements.
- * @param {Element} section A generated section about to be removed
- * @returns {Element[]}
- */
-function extractSsrGalleryImages(section) {
-  return [...section.querySelectorAll('picture')];
 }
 
 /**
@@ -226,44 +197,33 @@ function prioritizeFirstGalleryImage(main) {
 }
 
 /**
- * Ensures a product-details block is present on any page with a sku meta tag,
- * but only once real product data is confirmed to exist for that sku. On
- * product bus pages, the generated content (h1, price, images, description)
- * arrives as one or more leading sections with no authored blocks inside
- * them, so every such section is stripped, along with variant sections,
- * before the product-details block is built. Stripping stops as soon as a
- * section containing an authored block is found. If the catalog has no data
- * for this sku (or the fetch fails), the original server-rendered content is
- * left untouched.
+ * Ensures a product-details block is present on any page with a sku meta tag.
+ * On product bus pages, the generated content (h1, price, images,
+ * description) arrives as one or more leading sections with no authored
+ * blocks inside them, so every such section is stripped, along with variant
+ * sections, before the product-details block is built. Stripping stops as
+ * soon as a section containing an authored block is found.
+ *
+ * The block is built synchronously, and wraps that already-rendered content
+ * as-is (untouched, unparsed) rather than waiting on product data - so real
+ * content is visible immediately instead of an empty placeholder. It's up to
+ * the product-details block itself to inspect what's there and decide what
+ * to keep versus fill in with the PDP dropin once product data resolves; see
+ * blocks/product-details/product-details.js. The full product data fetch
+ * (price, attributes, stock, interactivity) is kicked off in the background;
+ * see getProductDataPromise().
  * @param {Element} main The main element
  */
-export async function buildProductDetailsBlock(main) {
+export function buildProductDetailsBlock(main) {
   const sku = getProductSku();
   if (!sku) return;
 
   prioritizeFirstGalleryImage(main);
 
-  let product;
-  try {
-    await initializeCommerce();
-    const { setEndpoint, fetchProductData } = await import('@dropins/storefront-pdp/api.js');
-    setEndpoint(csFetchGraphQL);
-    productDataPromise = fetchProductData(sku, { skipTransform: true });
-    product = await productDataPromise;
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching product data:', e);
-    return;
-  }
-  if (!product) return;
-
-  ssrGalleryImages = [];
-
+  const ssrContent = [];
   let section = main.querySelector(':scope > div:first-child');
   while (section && isGeneratedSection(section)) {
-    if (!ssrGalleryImages.length) {
-      ssrGalleryImages = extractSsrGalleryImages(section);
-    }
+    ssrContent.push(...section.children);
     const next = section.nextElementSibling;
     section.remove();
     section = next;
@@ -272,7 +232,7 @@ export async function buildProductDetailsBlock(main) {
   main.querySelectorAll(':scope > div[data-sku]').forEach((div) => div.remove());
 
   if (!main.querySelector('.product-details')) {
-    const block = buildBlock('product-details', { elems: [] });
+    const block = buildBlock('product-details', { elems: ssrContent });
     const targetSection = main.querySelector(':scope > div:first-child');
     if (targetSection) {
       targetSection.prepend(block);
@@ -282,6 +242,23 @@ export async function buildProductDetailsBlock(main) {
       main.prepend(newSection);
     }
   }
+
+  // Fetch full product data (price, attributes, stock, interactivity) in the
+  // background - initializers/pdp.js awaits getProductDataPromise() once the
+  // dropin bundle loads. Assigning the whole chain (not just the eventual
+  // fetchProductData call) synchronously here means getProductDataPromise()
+  // never returns null to a caller that runs before this resolves.
+  productDataPromise = initializeCommerce()
+    .then(() => import('@dropins/storefront-pdp/api.js'))
+    .then(({ setEndpoint, fetchProductData }) => {
+      setEndpoint(csFetchGraphQL);
+      return fetchProductData(sku, { skipTransform: true });
+    })
+    .catch((e) => {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching product data:', e);
+      return null;
+    });
 }
 
 /**

@@ -205,15 +205,15 @@ async function loadEager(doc) {
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
-    await buildProductDetailsBlock(main);
+    buildProductDetailsBlock(main);
     decorateMain(main);
+    document.body.classList.add('appear');
     try {
       await loadCommerceEager();
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error loading commerce content:', e);
     }
-    document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
 

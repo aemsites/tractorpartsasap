@@ -19,10 +19,10 @@
  * (thumbnails, peak, loop, zoom, videos).
  *
  * @param {Element[]} pictures <picture> elements captured from SSR markup
- * @returns {(rootElement: Element) => Promise<void>}
+ * @returns {(rootElement: Element) => void}
  */
 export default function renderSsrGallery(pictures) {
-  return async (rootElement) => {
+  return (rootElement) => {
     const [firstPicture] = pictures;
     const firstImg = firstPicture?.querySelector('img');
     if (firstImg) {
