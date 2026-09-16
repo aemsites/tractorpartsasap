@@ -12,11 +12,14 @@ export function getProductSku() {
 }
 
 /**
- * Gets the SSR-rendered product description markup, if one was found in the page.
- * @returns {string|null} The description's innerHTML, or null if not found
+ * Gets the SSR-rendered product description element, if one was found in the page.
+ * Callers should only remove this element once they've confirmed a replacement
+ * (e.g. the PDP drop-in's description) has rendered successfully, so the SSR
+ * markup continues to serve as a fallback until then.
+ * @returns {Element|null} The description div, or null if not found
  */
-export function getSsrDescriptionHTML() {
-  return window.ssrDescriptionHTML || null;
+export function getSsrDescriptionElement() {
+  return window.ssrDescriptionElement || null;
 }
 
 /**
@@ -102,9 +105,12 @@ export function buildProductDetailsBlock(main) {
   // switch to that marker once it's available.
   const topLevelDivs = Array.from(main.querySelectorAll(':scope > div'));
   const descriptionDiv = topLevelDivs[1];
-  window.ssrDescriptionHTML = (descriptionDiv && !descriptionDiv.classList.contains('section'))
-    ? descriptionDiv.innerHTML
-    : null;
+  const isSsrDescription = descriptionDiv && !descriptionDiv.classList.contains('section');
+  // Keep a reference to the element itself so it can be removed later, once
+  // the block has confirmed a replacement rendered successfully. Do not
+  // remove/hide it here: it must keep serving as a no-JS/failure fallback
+  // until decoration has actually succeeded.
+  window.ssrDescriptionElement = isSsrDescription ? descriptionDiv : null;
 
   // Commented is "prior art". Existed to remove SSR elements to be replaced by
   // the product-details block result.

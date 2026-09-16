@@ -11,7 +11,32 @@ import ProductPrice from '@dropins/storefront-pdp/containers/ProductPrice.js';
 import ProductQuantity from '@dropins/storefront-pdp/containers/ProductQuantity.js';
 import ProductShortDescription from '@dropins/storefront-pdp/containers/ProductShortDescription.js';
 
-import { getSsrDescriptionHTML } from '../../scripts/commerce.js';
+import { getSsrDescriptionElement } from '../../scripts/commerce.js';
+
+/**
+ * Removes product-bus SSR markup now replaced by the PDP drop-in, without
+ * touching neighboring authored sections. Only called after the drop-in has
+ * rendered successfully, so the SSR markup keeps serving as a fallback if
+ * rendering fails.
+ * @param {Element} block The product-details block
+ */
+function removeSsrContent(block) {
+  const main = block.closest('main');
+  const section = block.closest('.section');
+  const blockWrapper = block.parentElement;
+
+  if (section && blockWrapper) {
+    [...section.children]
+      .filter((child) => child !== blockWrapper)
+      .forEach((child) => child.remove());
+  }
+
+  main?.querySelectorAll(':scope > .section[data-sku]').forEach((variantSection) => {
+    variantSection.remove();
+  });
+
+  getSsrDescriptionElement()?.remove();
+}
 
 /**
  * Maps JSONLD to the ProductModel required by the PDP containers.
@@ -33,7 +58,7 @@ function getProductData() {
     name: jsonLd?.name,
     // jsonLd's description is the short description; the long description
     // is only available as SSR markup rendered on the page.
-    description: getSsrDescriptionHTML(),
+    description: getSsrDescriptionElement()?.innerHTML ?? null,
     url: jsonLd?.url,
     images: images.map((url) => ({ url, label: null, roles: [] })),
     attributes: [],
@@ -110,4 +135,6 @@ export default async function decorate(block) {
       block.querySelector('.product-details__attributes'),
     ),
   ]);
+
+  removeSsrContent(block);
 }
