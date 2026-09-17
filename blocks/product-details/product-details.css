@@ -1,0 +1,443 @@
+/* Product region sits on white, not the page's grey band. */
+main .section:has(.product-details) {
+  margin: 0;
+  padding: 24px 0 48px;
+  background-color: var(--light-color);
+}
+
+.product-details {
+  --pd-rule: 1px solid var(--border-color);
+  --pd-muted: #7d7d7d;
+  --pd-shipping-blue: #4a90e2;
+
+  /* Remap the PDP drop-in's brand design tokens (used by its primary button,
+   * etc.) onto our brand red so drop-in components adopt the site palette. */
+  --color-brand-500: var(--brand-red);
+  --color-brand-600: #b30000;
+  --color-brand-700: #900;
+
+  color: var(--text-color);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Neutralise the global red link colour inside the block; specific links below
+ * opt back into a colour. Beats the global a:any-link rule (0,1,1). */
+.product-details a:any-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- top: gallery | info ---------- */
+.product-details__top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px 40px;
+}
+
+@media (width >= 900px) {
+  .product-details__top {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.product-details__info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- gallery ---------- */
+.product-details__gallery {
+  min-width: 0;
+}
+
+.product-details__gallery .pdp-carousel__wrapper {
+  display: flex;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  border: var(--pd-rule);
+  background-color: var(--light-color);
+}
+
+.product-details__gallery .pdp-carousel__wrapper img,
+.product-details__gallery .pdp-carousel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-details__gallery .pdp-carousel__slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+}
+
+/* thumbnail row */
+.product-details__gallery .pdp-carousel__controls__container--thumbnailsRow {
+  margin-top: 12px;
+}
+
+.product-details__gallery .pdp-carousel__controls--thumbnailsRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__container {
+  flex: 0 0 72px;
+  box-sizing: border-box;
+  width: 72px;
+  height: 72px;
+  padding: 4px;
+  border: var(--pd-rule);
+  border-radius: 2px;
+  background: var(--light-color);
+  cursor: pointer;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-details__gallery .pdp-carousel__thumbnail__container:has(input:checked),
+.product-details__gallery .pdp-carousel__thumbnail__container[aria-current="true"] {
+  border-color: var(--text-color);
+}
+
+/* ---------- header ---------- */
+.product-details__header .pdp-header {
+  display: block;
+}
+
+.product-details__header .pdp-header__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-color);
+}
+
+/* the drop-in's own sku line is shown as "ASAP Item No." in the meta row below */
+.product-details__header .pdp-header__sku {
+  display: none;
+}
+
+/* ---------- meta: reviews | item no ---------- */
+.product-details__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  margin-top: 16px;
+  border-bottom: var(--pd-rule);
+}
+
+.product-details__reviews {
+  font-size: 14px;
+  color: var(--pd-muted);
+}
+
+.product-details__item-no {
+  font-size: 14px;
+  color: var(--pd-muted);
+  white-space: nowrap;
+}
+
+.product-details__item-no-value {
+  color: var(--text-color);
+}
+
+/* ---------- purchase row: pricing | condition ---------- */
+.product-details__purchase {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0;
+}
+
+.product-details__pricing {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  gap: 6px 28px;
+}
+
+/* subgrid keeps labels on row 1 and prices baseline-aligned on row 2 */
+.product-details__price-col {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
+  align-items: end;
+}
+
+.product-details__price-label {
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.product-details__price .pdp-price,
+.product-details__price .dropin-price {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brand-red);
+}
+
+.product-details__oem-price {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--pd-muted);
+  text-decoration: line-through;
+}
+
+/* condition toggle (New / Used / Rebuilt) */
+.product-details__condition {
+  display: inline-flex;
+  border: var(--pd-rule);
+  border-radius: var(--button-radius);
+  overflow: hidden;
+}
+
+.product-details__condition-option {
+  padding: 6px 14px;
+  font-size: 14px;
+  color: var(--pd-muted);
+  border-left: var(--pd-rule);
+  white-space: nowrap;
+}
+
+.product-details__condition-option:first-child {
+  border-left: 0;
+}
+
+.product-details__condition-option.is-active {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+/* on the unavailable variant there is no price, so the toggle sits alone */
+.product-details--unavailable .product-details__purchase {
+  border-top: var(--pd-rule);
+}
+
+/* ---------- shipping ---------- */
+.product-details__shipping {
+  padding: 14px 0;
+  border-top: var(--pd-rule);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--pd-shipping-blue);
+}
+
+/* ---------- fitment: equipment specific | check fit ---------- */
+.product-details__fitment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0;
+  border-top: var(--pd-rule);
+}
+
+.product-details__fitment-head {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.product-details a.product-details__fitment-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+.product-details__check-fit {
+  flex: 0 0 auto;
+  padding: 12px 22px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--light-color);
+  background-color: var(--dark-color);
+  border: 0;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+}
+
+.product-details__check-fit:hover {
+  background-color: #000;
+}
+
+/* ---------- actions: quantity + add to cart ---------- */
+.product-details__actions {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  padding: 18px 0;
+  border-top: var(--pd-rule);
+}
+
+.product-details__quantity .dropin-incrementer,
+.product-details__quantity .dropin-incrementer__content {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.product-details__quantity .dropin-incrementer {
+  border: var(--pd-rule);
+  border-radius: var(--button-radius);
+  overflow: hidden;
+}
+
+.product-details__quantity button {
+  width: 40px;
+  height: 100%;
+  font-size: 20px;
+  background: var(--light-color);
+  border: 0;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.product-details__quantity input {
+  width: 44px;
+  height: 100%;
+  text-align: center;
+  border: 0;
+  border-left: var(--pd-rule);
+  border-right: var(--pd-rule);
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--text-color);
+  appearance: textfield;
+}
+
+.product-details__quantity input::-webkit-outer-spin-button,
+.product-details__quantity input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.product-details__add-to-cart {
+  flex: 1 1 auto;
+}
+
+.product-details .product-details__add-to-cart .dropin-button--primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--light-color);
+  background-color: var(--brand-red);
+  border: 0;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+}
+
+.product-details .product-details__add-to-cart .dropin-button--primary:disabled {
+  opacity: 0.85;
+  cursor: default;
+}
+
+.product-details .product-details__add-to-cart .dropin-button--primary:hover:not(:disabled) {
+  background-color: var(--brand-red-hover);
+}
+
+/* ---------- assurances ---------- */
+.product-details__assurances {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.product-details__assurance {
+  padding: 16px 0;
+  border-top: var(--pd-rule);
+  font-size: 14px;
+}
+
+.product-details__assurance-text strong {
+  font-weight: 700;
+}
+
+/* ---------- unavailable panel ---------- */
+.product-details__unavailable:not(:empty) {
+  margin-top: 20px;
+}
+
+.product-details__unavailable .dropin-in-line-alert {
+  padding: 20px;
+  background-color: #f4f4f4;
+  border: var(--pd-rule);
+  border-radius: 0;
+}
+
+.product-details__unavailable .dropin-in-line-alert__title {
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+/* neutralise the drop-in's orange "warning" icon to match the source's grey box */
+.product-details__unavailable .dropin-in-line-alert__title-container svg {
+  width: 20px;
+  height: 20px;
+  color: var(--text-color);
+  fill: var(--text-color);
+}
+
+.product-details__unavailable .dropin-in-line-alert__description {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+/* ---------- description (bottom section) ---------- */
+.product-details__description {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 2px solid var(--border-color);
+}
+
+.product-details__description::before {
+  content: "Description";
+  display: block;
+  margin-bottom: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.product-details__description ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.9;
+}
+
+.product-details__description .california-prop65 {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-muted-color);
+}
+
+.product-details__attributes {
+  margin-top: 24px;
+}

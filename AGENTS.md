@@ -18,8 +18,10 @@ The repository provides the basic structure, blocks, and configuration needed to
 ## Setup Commands
 
 - Install dependencies: `npm install`
-- Start local development: `npx -y @adobe/aem-cli up --no-open --forward-browser-logs` (run in background, if possible)
-  - Install the AEM CLI globally by running `npm install -g @adobe/aem-cli` then `aem up` is equivalent to the command above
+- Start local development: `npx -y @adobe/aem-cli up --no-open --forward-browser-logs --url https://pdp-dropin--tractorpartsasap--aemsites.aem.network` (run in background, if possible)
+  - **This project requires `--url https://pdp-dropin--tractorpartsasap--aemsites.aem.network`** so the dev server proxies to the correct content backend. Without it, existing/real content pages (e.g. product pages) will 404.
+  - Install the AEM CLI globally by running `npm install -g @adobe/aem-cli` then `aem up --url https://pdp-dropin--tractorpartsasap--aemsites.aem.network` is equivalent to the command above
+  - Append `--html-folder drafts` (or `--drafts`, depending on CLI version) to also serve local static HTML test files from `drafts/` at `/drafts/...`, in addition to the proxied backend content
   - The dev server runs at `http://localhost:3000` with auto-reload. Open it in playwright, puppeteer, or a browser. If none are available, ask the human to open it and give feedback.
 - Run linting before committing: `npm run lint`
 - Auto-Fix linting issues: `npm run lint:fix`
@@ -60,7 +62,7 @@ The repository provides the basic structure, blocks, and configuration needed to
   - Declare styles mobile first, use `min-width` media queries at 600px/900px/1200px for tablet and desktop
 - Ensure all selectors are scoped to the block.
   - Bad: `.item-list`
-  - Good: `.{blockname} .item-list`   
+  - Good: `.{blockname} .item-list`
 - Avoid classes `{blockname}-container` and `{blockname}-wrapper` as those are used on sections and could be confusing.
 
 ### HTML
@@ -82,7 +84,7 @@ You can inspect the contents of any page with `curl http://localhost:3000/path/t
 
 ### Blocks
 
-Blocks are the re-usable building blocks of AEM. Blocks add styling and functionality to content. Each block has an initial content structure it expects, and transforms the html in the block using DOM APIs to render a final structure. 
+Blocks are the re-usable building blocks of AEM. Blocks add styling and functionality to content. Each block has an initial content structure it expects, and transforms the html in the block using DOM APIs to render a final structure.
 
 The initial content structure is important because it impacts how the author will create the content and how you will write your code to decorate it. In some sense, you can think of this structure as the contract for your block between the author and the developer. You should decide on this initial structure before writing any code, and be careful when making changes to code that makes assumptions about that structure as it could break existing pages.
 
