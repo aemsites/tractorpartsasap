@@ -1,3 +1,12 @@
 {
-  "extends": ["stylelint-config-standard"]
+  "extends": ["stylelint-config-standard"],
+  "overrides": [
+    {
+      "comment": "The product-details block's markup (scripts/commerce.js, blocks/product-details/product-details.js) follows the PDP drop-in's BEM-with-double-underscore class convention, and some drop-in classes use camelCase modifiers (e.g. --thumbnailsRow), so its CSS needs to select those exact classes.",
+      "files": ["blocks/product-details/*.css"],
+      "rules": {
+        "selector-class-pattern": "^([a-z][a-zA-Z0-9]*)(-[a-zA-Z0-9]+)*(__([a-zA-Z0-9]+-?)+)*(--([a-zA-Z0-9]+-?)+)?$"
+      }
+    }
+  ]
 }
