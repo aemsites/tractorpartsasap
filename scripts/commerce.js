@@ -112,16 +112,6 @@ export function buildProductDetailsBlock(main) {
   // until decoration has actually succeeded.
   window.ssrDescriptionElement = isSsrDescription ? descriptionDiv : null;
 
-  // Commented is "prior art". Existed to remove SSR elements to be replaced by
-  // the product-details block result.
-  // const firstSection = main.querySelector(':scope > div:first-child');
-  // const isProductBus = firstSection && !firstSection.querySelector(':scope > div[class]');
-  // if (isProductBus) {
-  //   firstSection.remove();
-  //   // product bus variant sections have data-sku before decorateMain runs
-  //   main.querySelectorAll(':scope > div[data-sku]').forEach((div) => div.remove());
-  // }
-
   if (!main.querySelector('.product-details')) {
     const block = buildBlock('product-details', { elems: [] });
     const targetSection = main.querySelector(':scope > div:first-child');
